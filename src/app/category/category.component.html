@@ -1,0 +1,11 @@
+<h3>{{cat_title}}</h3>
+
+<div class="list-group">
+    <a class="list-group-item active">Tüm Ürünler</a>
+</div>
+
+<div class="list-group" *ngFor="let kategori of categories">
+    
+    <a class="list-group-item">{{kategori.cat_name}}</a>
+
+</div>

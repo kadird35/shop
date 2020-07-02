@@ -1,0 +1,67 @@
+<h3 *ngIf="products; else noProduct">{{ title }}</h3>
+<!-- kendi custom pipe komutlarımızı yazıcaz bunun için terminalden
+ng g pipe pipeFilter adında pipe oluşturduk  -->
+<div class="form-group">
+  <input
+    class="form-control"
+    id="productName"    
+    placeholder="Arama Metninizi giriniz."
+    [(ngModel)]="filterText"/> 
+    <!--   [(ngModel)]="filterText"   two way binding  yani hem veri alan hemde veri gönderen alan
+     [(ngModel)]="filterText"  bu satırın bu dosya içinde çalışması için app.module.ts dosyasına 
+     FormModule componentini import etmemiz gerekiyor-->
+<!-- id="productName"     isim önemli değil urun_adi da yazabilirdik -->
+  <small *ngIf="filterText" class="form-text text-muted"> <!--*ngIf="filterText" // arama alanında 
+    string girilmişse  "  Şu anda <strong>{{filterText}} </strong>aradınız." burası ekranda görünüyor-->
+    Şu anda <strong>{{filterText}} </strong>aradınız.
+  </small>
+</div>
+<!-- ************************************* -->
+<div class="row">
+  <ng-template #noProduct>
+    <div class="alert alert-danger" role="alert">
+      Bu Kategoride ürün yoktur.
+    </div>
+  </ng-template>
+
+  <div
+    *ngFor="let product of products | productFilter:filterText" 
+    class="card"
+    style="width: 18rem; margin: 2px;"
+  >
+<!-- *ngFor="let product of products | productFilter:filterText" 
+  | productFilter // pipe adı
+  :filterText // gönderilen parametre
+   -->
+
+    <!-- *ngFor="let product of products" satırı ile veri tabanından, bu projede ise 
+      product.component.ts dosyasından aldığımız verileri okumak için kuullanılıyor -->
+    <img [src]="product.imgUrl" class="card-img-top" alt="..." />
+    <div class="card-body">
+      <h5 class="card-title">{{ product.name }}</h5>
+      <h5 class="card-title">
+        {{ product.price | currency: "":true:"1.2-2" }}
+      </h5>
+      <!-- pipe | işareti nin belirli tanımları var angular siteden bak
+          currency:'':true yazarsak $ işareti çıkıyor
+        false yazarsak ve '₺ '(alt-gr+T)' yazarsak rakam önüne ₺ işaretini koyuyor
+      sonraki "1.2-2" ise binlik ayıracı ve 2 basamak kuruş için-->
+      <p class="card-text">{{ product.description }}</p>
+      <a (click)="addToCart(product)" class="btn btn-primary"><i class="fas fa-cart-plus"></i>Sepete Ekle</a>
+      <!-- click yapınca product.component.ts dosyasında 
+      
+  ngOnInit(): void {   
+  }
+ addToCart() {
+   alert("Sepete Eklendi") //test amaçlı yazıldı
+   product değişkenini addToCart Fonksiyonu içine atarsak
+   ve porduct.component.ts dosyasında oluşturduğumuz addToCart componentine de 
+   parametre olarak verirsek laert te ürün adını görürüz.
+ }
+
+ bu şekilde bir fonksiyon çalıştırırız
+
+      -->
+    </div>
+  </div>
+</div>
